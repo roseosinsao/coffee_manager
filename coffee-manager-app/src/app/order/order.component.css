@@ -1,0 +1,17 @@
+.order-container {
+  margin: 25px;
+}
+
+.card-container {
+  margin: 10px;
+  width: 200px;
+  display: inline-flex;
+}
+
+.in-list {
+  min-height: 50px;
+}
+
+.in-list li {
+  margin-left: 40px;
+}
