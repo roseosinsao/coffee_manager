@@ -25,6 +25,7 @@ import { InventoryComponent } from './inventory/inventory.component';
 import { ManagementComponent } from './management/management.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { Globals } from './globals';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,7 @@ import { FormsModule } from '@angular/forms';
     MatSelectModule,
     FormsModule
   ],
-  providers: [],
+  providers: [Globals],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

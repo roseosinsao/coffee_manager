@@ -8,6 +8,7 @@ import { StockService } from '../services/stock.service';
 import { IngredientService } from '../services/ingredient.service';
 import { Ingredient } from '../models/ingredient.model';
 import { Stock } from '../models/stock.model';
+import { StockWebModel } from '../models/stocks-request.model';
 
 @Component({
   selector: 'app-management',
@@ -107,7 +108,7 @@ export class ManagementComponent implements OnInit {
       ingredient: this.coffeebean,
       pantry: pantry
     };
-    const addMilktock: Stock = {
+    const addMilkStock: Stock = {
       id: Guid.create().toString(),
       pantryId: pantry.id,
       ingredientId: this.milk.id,
@@ -115,6 +116,17 @@ export class ManagementComponent implements OnInit {
       ingredient: this.milk,
       pantry: pantry
     };
+
+    const stocks: Array<Stock> = [];
+    stocks.push(addSugarStock);
+    stocks.push(addCoffeebeanStock);
+    stocks.push(addMilkStock);
+    const stocksWebModel: StockWebModel = {
+      stocks: stocks
+    };
+
+    this.stockService.addNewStocks(stocksWebModel)
+    .subscribe(() => console.log('added stocks'));
   }
 
   addPantry() {

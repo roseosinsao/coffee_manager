@@ -3,20 +3,25 @@
   <span class="fill"></span>
   <span style="margin-right: 15px;">
     <mat-form-field>
-      <mat-select placeholder="Office Name">
-        <mat-option>
-          here
+      <mat-select [(ngModel)]="selectedOffice" (ngModelChange)="onChangeOffice($event)" placeholder="Office Name">
+        <mat-option *ngFor="let office of offices" [value]="office">
+          {{office.name}}
         </mat-option>
       </mat-select>
     </mat-form-field>
   </span>
   <span style="margin-right: 15px;">
     <mat-form-field>
-      <mat-select placeholder="Pantry Name">
-        <mat-option>
-          here
+      <mat-select [disabled]="!selectedOffice" [(ngModel)]="selectedPantry" (ngModelChange)="onChangePantry($event)" placeholder="Pantry Name">
+        <mat-option *ngFor="let pantry of pantries" [value]="pantry">
+          {{pantry.name}}
         </mat-option>
       </mat-select>
+    </mat-form-field>
+  </span>
+  <span style="margin-right: 15px;">
+    <mat-form-field>
+      <input [(ngModel)]="globals.name" matInput placeholder="Your Name">
     </mat-form-field>
   </span>
   <span>
