@@ -56,7 +56,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getDrinkPerCategory(pantry: Pantry): void {
-    this.stockService.getOrdersPerPantry(pantry.id)
+    this.stockService.getStocksPerPantry(pantry.id)
     .subscribe((stocks) => {
       this.stocks = stocks;
       this.showChart();

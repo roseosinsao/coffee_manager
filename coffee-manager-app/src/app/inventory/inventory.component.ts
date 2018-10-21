@@ -6,6 +6,8 @@ import { Order } from '../models/order.model';
 import { StockService } from '../services/stock.service';
 import { Stock } from '../models/stock.model';
 import { Ingredient } from '../models/ingredient.model';
+import { Globals } from '../globals';
+import { Guid } from 'guid-typescript';
 
 @Component({
   selector: 'app-inventory',
@@ -28,38 +30,25 @@ export class InventoryComponent implements OnInit {
   reloadStock = false;
 
   constructor(
-    private officeService: OfficesService,
+    private globals: Globals,
     private stockService: StockService
   ) {
     this.Math = Math;
   }
 
   ngOnInit() {
-    this.getOffices();
-  }
-  getOffices(): void {
-    this.officeService.getOffices()
-    .subscribe(offices => {
-      this.offices = offices;
-    });
+    this.refreshStocks();
   }
 
-  onChangeOffice(office: Office): void {
-    this.isSelectedOffice = office;
-    this.pantries = office.pantry;
+  refreshStocks() {
+    if (this.globals.pantry) {
+      this.getStocks(this.globals.pantry.id);
+    }
   }
 
-  onChangePantry(pantry: Pantry): void {
-    this.isSelectedPantry = pantry;
-    this.stockService.getOrdersPerPantry(pantry.id)
-    .subscribe((stocks => {
-      this.stocks = stocks;
-      if (this.stocks.length > 0) {
-      this.reload = true;
-      } else {
-        this.reloadStock = true;
-      }
-    }));
+  getStocks(pantryId: String) {
+    this.stockService.getStocksPerPantry(pantryId)
+      .subscribe(stocks => this.stocks = stocks);
   }
 
   setIngredient(stock: Stock): void {
@@ -85,7 +74,6 @@ export class InventoryComponent implements OnInit {
 
     this.stockService.updateStock(updatedStock)
     .subscribe(() => {
-      this.onChangePantry(this.isSelectedPantry);
       this.ingredientValue = 0;
       this.isSelectIngredient = false;
     });

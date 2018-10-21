@@ -21,7 +21,6 @@ export class PantryService {
   }
 
   addPantry(model: Pantry): Observable<Pantry> {
-    console.log(model);
     return this.http.post<Pantry>(this.pantriesURL, model);
   }
 }

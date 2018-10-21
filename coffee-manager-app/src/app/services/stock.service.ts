@@ -23,7 +23,7 @@ export class StockService {
     return this.http.post<StockWebModel>(`${this.stocksURL}/fill`, stocks);
   }
 
-  getOrdersPerPantry(pantryId: Guid): Observable<Array<Stock>> {
+  getStocksPerPantry(pantryId: String): Observable<Array<Stock>> {
     if (pantryId) {
       return this.http.get<Array<Stock>>(`${this.stocksURL}/pantry/${pantryId}`);
     }
