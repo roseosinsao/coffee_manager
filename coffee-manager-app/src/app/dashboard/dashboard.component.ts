@@ -1,12 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { OrderService } from '../services/order.service';
 import { Order } from '../models/order.model';
 import { Office } from '../models/office.model';
 import { Pantry } from '../models/pantry.model';
-import { OfficesService } from '../services/office.service';
-import { StockService } from '../services/stock.service';
 import { Stock } from '../models/stock.model';
 import { Chart } from 'chart.js';
+import { Globals } from '../globals';
+import { OrderPieChartModel } from '../models/order-chart.model';
+import { MatTableDataSource, MatPaginator } from '@angular/material';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,95 +15,58 @@ import { Chart } from 'chart.js';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  orders: Array<Order>;
   isSelectedOffice: Office;
   pantries: Array<Pantry>;
   offices: Array<Office>;
   stocks: Array<Stock>;
   stockChart: Chart;
+  chart: Array<OrderPieChartModel>;
+  loadChart = false;
+  dataSource = new MatTableDataSource<Order>();
+  displayedColumns: string[] = ['name', 'order', 'quantity', 'orderDate'];
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  public pieChartLabels: Array<string> = ['Sweet Latte', 'Flat White', 'Double Americano'];
+  public pieChartData:  Array<number> = [];
+  public pieChartType = 'pie';
+  public pieChartColors: Array<any> = [ {
+      backgroundColor:  ['#FF7360', '#6FC8CE', '#FAFFF2']
+    }];
 
   constructor(
     private orderService: OrderService,
-    private officeService: OfficesService,
-    private stockService: StockService
+    private globals: Globals
   ) { }
 
   ngOnInit() {
-    this.getOffices();
+    if (this.globals.pantry) {
+      this.loadDashboard();
+      this.loadChart = true;
+    }
   }
 
-  getOffices(): void {
-    this.officeService.getOffices()
-    .subscribe(offices => {
-      this.offices = offices;
-    });
-  }
-
-  onChangeOffice(office: Office): void {
-    this.isSelectedOffice = office;
-    this.pantries = office.pantry;
-  }
-
-  onChangePantry(pantry: Pantry): void {
-    this.getHistoryOrders(pantry);
-    this.getDrinkPerCategory(pantry);
+  loadDashboard(): void {
+    this.getHistoryOrders(this.globals.pantry);
+    this.buildPieChart();
   }
 
   getHistoryOrders(pantry: Pantry): void {
     this.orderService.getOrdersPerPantry(pantry.id)
     .subscribe((orders) => {
-      this.orders = orders;
+      this.dataSource = new MatTableDataSource<Order>(orders);
+      this.dataSource.paginator = this.paginator;
     });
   }
 
-  getDrinkPerCategory(pantry: Pantry): void {
-    this.stockService.getStocksPerPantry(pantry.id)
-    .subscribe((stocks) => {
-      this.stocks = stocks;
-      this.showChart();
+  buildPieChart(): void {
+    this.orderService.getPieChart(this.globals.pantry.id)
+    .subscribe((chart) => {
+      this.chart = chart;
+      const labels = this.chart.map(a => a.coffeeName);
+      const data = this.chart.map(a => a.total);
+      this.pieChartLabels = labels;
+      this.pieChartData = data;
+      this.loadChart = true;
     });
-  }
-
-  showChart() {
-    const labels = this.stocks.map(a => a.ingredient.name);
-    const data = this.stocks.map(a => a.value);
-    const canvas: any = document.getElementById('stockBarChart');
-    const ctx: CanvasRenderingContext2DSettings = canvas.getContext('2d');
-    this.stockChart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-      labels: labels, // your labels array
-      datasets: [
-        {
-          label: '# user count',
-          data: data, // your data array
-          backgroundColor: [
-           'rgba(54, 162, 235, 1)',
-           'rgba(255, 99, 132, 1)',
-           'rgba(255, 206, 86, 1)'
-
-          ],
-          fill: true,
-          lineTension: 0.2,
-          borderWidth: 1
-        }
-      ]
-      },
-      options: {
-        responsive: true,
-        title: {
-        text: 'Distribution of Drinks Ordered',
-        display: true
-        },
-        scales: {
-          yAxes: [{
-            ticks: {
-              beginAtZero: true
-            }
-          }]
-        }
-      }
-    });
-  console.log(this.stockChart);
   }
 }

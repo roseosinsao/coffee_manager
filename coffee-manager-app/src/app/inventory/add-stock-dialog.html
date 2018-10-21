@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>Add Stock</h1>
+<div mat-dialog-content>
+  <mat-select placeholder="Select Ingredient" [(ngModel)]="data.selectedStock">
+    <mat-option *ngFor="let stock of data.stocks" [value]="stock">
+      {{stock.ingredient.name}}
+    </mat-option>
+  </mat-select>
+  <mat-form-field>
+    <input type="number" [(ngModel)]="data.value" matInput placeholder="How Many Packs?">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="onOkClick()">Ok</button>
+  <button mat-raised-button color="warn" (click)="onCancelClick()">Cancel</button>
+</div>

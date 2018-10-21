@@ -1,5 +1,5 @@
 <div class="order-container">
-  <div *ngFor="let coffee of coffees" class="card-container">
+  <div *ngFor="let coffee of coffeeStatus" class="card-container">
     <mat-card>
       <mat-card-header class="card-title">
         <span>
@@ -16,7 +16,13 @@
         </ul>
       </mat-card-content>
       <mat-card-actions>
-        <button mat-raised-button color="primary" (click)="orderCoffee(coffee)"> Order </button>
+        <div *ngIf="!globals.pantry" class="error-message">Please select an office and pantry first.</div>
+        <div>
+          <button mat-raised-button [disabled]="!coffee.isAvailable"
+            color="primary" (click)="orderCoffee(coffee)"> 
+            {{ (coffee.isAvailable ? "Order" : "Not Available") }}
+          </button>
+        </div>
       </mat-card-actions>
     </mat-card>
   </div>

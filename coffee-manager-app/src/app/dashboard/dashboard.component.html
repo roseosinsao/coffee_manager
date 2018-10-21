@@ -1,22 +1,51 @@
-<select [(ngModel)]="selectedOffice" (ngModelChange)="onChangeOffice($event)">
-    <option *ngFor="let office of offices" [ngValue]="office">{{office.name}}</option>
-  </select>
+<div class="dashboard-container">
+  <mat-card class="mat-elevation-z8">
+    <mat-card-content>
+      <div>
+        <h3>Dashboard</h3>
+        <div *ngIf="!globals.pantry" class="error-message">Please select an office and pantry first.</div>
+      </div>
+      <div>
+        <button mat-raised-button color="primary" (click)="loadDashboard()">
+          <mat-icon>refresh</mat-icon> Refresh Data
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <div class="mat-elevation-z8 history-table">
+    <table mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="order">
+        <th mat-header-cell *matHeaderCellDef> Order </th>
+        <td mat-cell *matCellDef="let element"> {{element.coffee.name}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="quantity">
+        <th mat-header-cell *matHeaderCellDef> Quantity </th>
+        <td mat-cell *matCellDef="let element"> {{element.quantity}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="orderDate">
+        <th mat-header-cell *matHeaderCellDef> Order Date </th>
+        <td mat-cell *matCellDef="let element"> {{ element.orderDate | date: 'MMM. dd, yyyy hh:mm a' }} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+  </div>
   
-  <select *ngIf="pantries" [(ngModel)]="selectedPantry" (ngModelChange)="onChangePantry($event)">
-    <option *ngFor="let pantry of pantries" [ngValue]="pantry">{{pantry.name}}</option>
-  </select>
-
-<div  class="card-container" *ngIf="orders">
-    <mat-card>
-      <mat-card-content>
-        <h3 matLine> Order History </h3>
-        <mat-list>
-          <mat-list-item *ngFor="let order of orders"> {{ order.coffee.name}} for {{order.name}} </mat-list-item>
-        </mat-list>
-      </mat-card-content>
-    </mat-card>
-</div>
-
-<div  class="card-container" *ngIf="stocks">
-    <canvas id="stockBarChart"></canvas>
+  <mat-card class="drink-distribution-container mat-elevation-z8">
+    <mat-card-content>
+      <h3 matLine> Drinks Order Distribution </h3>
+      <canvas baseChart [data]="pieChartData" [labels]="pieChartLabels" [colors]="pieChartColors" [chartType]="pieChartType">
+      </canvas>
+    </mat-card-content>
+  </mat-card>
 </div>

@@ -6,7 +6,7 @@
           <input [(ngModel)]="officeName" matInput placeholder="Office Name">
         </mat-form-field>
         <span>
-          <button mat-raised-button (click)="createOffice()"> Add </button>
+          <button mat-raised-button color="accent" (click)="createOffice()"> <mat-icon>add</mat-icon> Add Office </button>
         </span>
       </mat-card-header>
       <mat-card-content>
@@ -24,7 +24,7 @@
           <input [(ngModel)]="pantryName" matInput placeholder="Pantry Name">
         </mat-form-field>
         <span>
-          <button mat-raised-button (click)="addPantry()"> Add </button>
+          <button mat-raised-button color="accent" (click)="addPantry()"> <mat-icon>add</mat-icon> Add Pantry </button>
         </span>
       </mat-card-header>
       <mat-card-content>

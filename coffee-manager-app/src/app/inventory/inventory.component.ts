@@ -1,13 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { OfficesService } from '../services/office.service';
-import { Office } from '../models/office.model';
+import { Component, OnInit, Inject } from '@angular/core';
 import { Pantry } from '../models/pantry.model';
-import { Order } from '../models/order.model';
 import { StockService } from '../services/stock.service';
 import { Stock } from '../models/stock.model';
-import { Ingredient } from '../models/ingredient.model';
 import { Globals } from '../globals';
-import { Guid } from 'guid-typescript';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-inventory',
@@ -15,23 +11,38 @@ import { Guid } from 'guid-typescript';
   styleUrls: ['./inventory.component.css']
 })
 export class InventoryComponent implements OnInit {
-  isSelectedOffice: Office;
-  pantries: Array<Pantry>;
-  offices: Array<Office>;
   stocks: Array<Stock>;
-  isSelectIngredient = false;
-  isSelectedPantry: Pantry;
-  isSelectedStock: Stock;
-  valueCost: number;
-  ingredientValue: number;
-  reload = false;
-  value: number;
+
   Math: any;
-  reloadStock = false;
+  public barChartType = 'bar';
+  public barChartOptions: any = {
+    scaleShowVerticalLines: false,
+    responsive: true,
+    legend: {
+      display: false,
+    },
+    scales: {
+      yAxes: [{
+          ticks: {
+              beginAtZero: true
+          }
+      }]
+  }
+  };
+  public barChartLabels: Array<string>;
+  public barChartData: any[] = [
+    { data: [],
+      label: 'Unit/s'}
+  ];
+  public barChartColors: Array<any> = [ {
+    backgroundColor: ['#FF7360', '#6FC8CE', '#FAFFF2']
+  }];
 
   constructor(
     private globals: Globals,
-    private stockService: StockService
+    private stockService: StockService,
+    public dialog: MatDialog,
+    public snackBar: MatSnackBar,
   ) {
     this.Math = Math;
   }
@@ -40,9 +51,23 @@ export class InventoryComponent implements OnInit {
     this.refreshStocks();
   }
 
+  updateChart(pantry: Pantry): void {
+    this.stockService.getStocksPerPantry(pantry.id)
+      .subscribe(stocks => {
+        this.stocks = stocks;
+        const labels = this.stocks.map(a => a.ingredient.name);
+        const data = this.stocks.map(a => a.value);
+        this.barChartLabels = labels;
+        this.barChartData.forEach((chart) => {
+          chart.data = data;
+        });
+      });
+  }
+
   refreshStocks() {
     if (this.globals.pantry) {
       this.getStocks(this.globals.pantry.id);
+      this.updateChart(this.globals.pantry);
     }
   }
 
@@ -51,31 +76,65 @@ export class InventoryComponent implements OnInit {
       .subscribe(stocks => this.stocks = stocks);
   }
 
-  setIngredient(stock: Stock): void {
-    this.isSelectedStock = stock;
-    this.isSelectIngredient = true;
-    this.valueCost = stock.value;
+  openAddStockDialog(): void {
+    const dialogRef = this.dialog.open(AddStockDialogComponent, {
+      width: '250px',
+      data: {
+        stocks: this.stocks,
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.openSnackBar('Add Stock Success!', 'Okay');
+      this.updateChart(this.globals.pantry);
+    });
   }
 
-  addNewStock(): void {
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 2000,
+    });
+  }
+}
 
+export interface DialogData {
+  stocks: Array<Stock>;
+  selectedStock: Stock;
+  value: number;
+}
+
+@Component({
+  selector: 'app-add-stock-dialog-component',
+  templateUrl: 'add-stock-dialog.html',
+})
+export class AddStockDialogComponent {
+  constructor(
+    public dialogRef: MatDialogRef<AddStockDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+    private stockService: StockService,
+  ) {
   }
 
   updateStockValue(): void {
-    this.reload = false;
     const updatedStock: Stock = {
-      id: this.isSelectedStock.id,
-      pantryId: this.isSelectedStock.pantryId,
-      ingredientId: this.isSelectedStock.ingredientId,
-      value: this.ingredientValue,
-      ingredient: this.isSelectedStock.ingredient,
-      pantry: this.isSelectedStock.pantry
+      id: this.data.selectedStock.id,
+      pantryId: this.data.selectedStock.pantryId,
+      ingredientId: this.data.selectedStock.ingredientId,
+      value: this.data.selectedStock.value + (this.data.value * 15),
+      ingredient: this.data.selectedStock.ingredient,
+      pantry: this.data.selectedStock.pantry
     };
 
     this.stockService.updateStock(updatedStock)
-    .subscribe(() => {
-      this.ingredientValue = 0;
-      this.isSelectIngredient = false;
-    });
+      .subscribe();
+  }
+
+  onOkClick(): void {
+    this.updateStockValue();
+    this.dialogRef.close();
+  }
+
+  onCancelClick(): void {
+    this.dialogRef.close();
   }
 }

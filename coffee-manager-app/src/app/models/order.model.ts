@@ -8,4 +8,5 @@ export class Order {
   quantity: number;
   pantryId: Guid;
   orderDate: Date;
+  coffee: Coffee;
 }

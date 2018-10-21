@@ -4,5 +4,5 @@ import { Guid } from 'guid';
 export class Coffee {
   id: Guid;
   name: Guid;
-  coffeeIngredient: CoffeeIngredient;
+  coffeeIngredient: Array<CoffeeIngredient>;
 }

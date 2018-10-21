@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Order } from '../models/order.model';
 import { Guid } from 'guid-typescript';
+import { OrderPieChartModel } from '../models/order-chart.model';
 
 @Injectable({
   providedIn: 'root'
@@ -25,5 +26,11 @@ export class OrderService {
       return this.http.get<Array<Order>>(`${this.ordersURL}/pantry/${pantryId}`);
     }
     return this.http.get<Array<Order>>(this.ordersURL);
+  }
+
+  getPieChart(pantryId: Guid): Observable<Array<OrderPieChartModel>> {
+    if (pantryId) {
+      return this.http.get<Array<OrderPieChartModel>>(`${this.ordersURL}/chart/${pantryId}`);
+    }
   }
 }

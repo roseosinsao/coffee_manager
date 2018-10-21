@@ -4,11 +4,9 @@ import { PantryService } from '../services/pantry.service';
 import { Office } from '../models/office.model';
 import { Pantry } from '../models/pantry.model';
 import { Guid } from 'guid-typescript';
-import { StockService } from '../services/stock.service';
 import { IngredientService } from '../services/ingredient.service';
 import { Ingredient } from '../models/ingredient.model';
-import { Stock } from '../models/stock.model';
-import { StockWebModel } from '../models/stocks-request.model';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-management',
@@ -29,8 +27,8 @@ export class ManagementComponent implements OnInit {
   constructor(
     private officeService: OfficesService,
     private pantryService: PantryService,
-    private stockService: StockService,
-    private ingredientService: IngredientService
+    private ingredientService: IngredientService,
+    public snackBar: MatSnackBar,
   ) { }
 
   ngOnInit() {
@@ -68,6 +66,7 @@ export class ManagementComponent implements OnInit {
     .subscribe(() => {
       this.officeName = '';
       this.getOffices();
+      this.openSnackBar('Add Office Success!', 'Okay');
     });
   }
 
@@ -91,44 +90,6 @@ export class ManagementComponent implements OnInit {
     });
   }
 
-  addStocks(pantry: Pantry): void {
-    const addSugarStock: Stock = {
-      id: Guid.create().toString(),
-      pantryId: pantry.id,
-      ingredientId: this.sugar.id,
-      value: 0,
-      ingredient: this.sugar,
-      pantry: pantry
-    };
-    const addCoffeebeanStock: Stock = {
-      id: Guid.create().toString(),
-      pantryId: pantry.id,
-      ingredientId: this.coffeebean.id,
-      value: 0,
-      ingredient: this.coffeebean,
-      pantry: pantry
-    };
-    const addMilkStock: Stock = {
-      id: Guid.create().toString(),
-      pantryId: pantry.id,
-      ingredientId: this.milk.id,
-      value: 0,
-      ingredient: this.milk,
-      pantry: pantry
-    };
-
-    const stocks: Array<Stock> = [];
-    stocks.push(addSugarStock);
-    stocks.push(addCoffeebeanStock);
-    stocks.push(addMilkStock);
-    const stocksWebModel: StockWebModel = {
-      stocks: stocks
-    };
-
-    this.stockService.addNewStocks(stocksWebModel)
-    .subscribe(() => console.log('added stocks'));
-  }
-
   addPantry() {
     const pantry: Pantry = {
       id: Guid.create().toString(),
@@ -137,11 +98,17 @@ export class ManagementComponent implements OnInit {
     };
 
     this.pantryService.addPantry(pantry)
-    .subscribe(() => {
-      this.pantryName = '';
-      this.getOffices();
-      this.addStocks(pantry);
-      this.getPantries();
+      .subscribe(() => {
+        this.pantryName = '';
+        this.getOffices();
+        this.getPantries();
+        this.openSnackBar('Add Pantry Success!', 'Okay');
+      });
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 2000,
     });
   }
 }
