@@ -1,7 +1,8 @@
 import { Office } from './office.model';
+import { Guid } from 'guid';
 
 export class Pantry {
-  id: string;
+  id: Guid;
   name: string;
-  office: Office;
+  officeId: Guid;
 }

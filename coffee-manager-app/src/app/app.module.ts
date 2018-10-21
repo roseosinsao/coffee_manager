@@ -11,6 +11,8 @@ import {
   MatDividerModule,
   MatCardModule,
   MatGridListModule,
+  MatFormFieldModule,
+  MatInputModule,
 } from '@angular/material';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -20,6 +22,8 @@ import { OrderComponent } from './order/order.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { InventoryComponent } from './inventory/inventory.component';
 import { ManagementComponent } from './management/management.component';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -33,6 +37,7 @@ import { ManagementComponent } from './management/management.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     MatToolbarModule,
     MatSidenavModule,
@@ -42,6 +47,9 @@ import { ManagementComponent } from './management/management.component';
     MatDividerModule,
     MatCardModule,
     MatGridListModule,
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

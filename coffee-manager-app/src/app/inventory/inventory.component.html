@@ -1,3 +1,44 @@
-<p>
-  inventory works!
-</p>
+<select [(ngModel)]="selectedOffice" (ngModelChange)="onChangeOffice($event)">
+    <option *ngFor="let office of offices" [ngValue]="office">{{office.name}}</option>
+  </select>
+  
+  <select *ngIf="pantries" [(ngModel)]="selectedPantry" (ngModelChange)="onChangePantry($event)">
+    <option *ngFor="let pantry of pantries" [ngValue]="pantry">{{pantry.name}}</option>
+  </select>
+
+<div class="management-container">
+  <div  class="card-container" *ngIf="stocks && reload">
+      <mat-card>
+        <mat-card-content>
+          <h3 matLine> Stock </h3>
+          <mat-list>
+            <button mat-list-item *ngFor="let stock of stocks" (click)="setIngredient(stock)"> {{ stock.ingredient.name }} - {{ Math.round(stock.value/3) }} (in packs) </button>
+          </mat-list>
+        </mat-card-content>
+      </mat-card>
+  </div>
+  <div  class="card-container" *ngIf="reloadStock">
+    <mat-card>
+      <mat-card-content>
+        <h3 matLine> Stock </h3>
+        <mat-list>
+          <button (click)="setIngredientForNew()"> Coffee beans </button>
+          <button (click)="setIngredientForNew()"> Milk </button>
+          <button (click)="setIngredientForNew()"> Sugar </button>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+</div>
+  <div *ngIf="isSelectIngredient" class="card-container">
+      <mat-card>
+        <mat-card-header class="form-container">
+          <mat-form-field>
+            <input [(ngModel)]="ingredientValue" matInput placeholder="In packs" value={{valueCost}}>
+          </mat-form-field>
+          <span>
+            <button mat-raised-button (click)="updateStockValue()"> Update </button>
+          </span>
+        </mat-card-header>
+      </mat-card>
+    </div>
+</div>

@@ -1,3 +1,22 @@
-<p>
-  dashboard works!
-</p>
+<select [(ngModel)]="selectedOffice" (ngModelChange)="onChangeOffice($event)">
+    <option *ngFor="let office of offices" [ngValue]="office">{{office.name}}</option>
+  </select>
+  
+  <select *ngIf="pantries" [(ngModel)]="selectedPantry" (ngModelChange)="onChangePantry($event)">
+    <option *ngFor="let pantry of pantries" [ngValue]="pantry">{{pantry.name}}</option>
+  </select>
+
+<div  class="card-container" *ngIf="orders">
+    <mat-card>
+      <mat-card-content>
+        <h3 matLine> Order History </h3>
+        <mat-list>
+          <mat-list-item *ngFor="let order of orders"> {{ order.coffee.name}} for {{order.name}} </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+</div>
+
+<div  class="card-container" *ngIf="stocks">
+    <canvas id="stockBarChart"></canvas>
+</div>

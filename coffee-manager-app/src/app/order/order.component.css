@@ -8,6 +8,10 @@
   display: inline-flex;
 }
 
+.card-title {
+  min-height: 75px;
+}
+
 .in-list {
   min-height: 50px;
 }

@@ -1,3 +1,38 @@
-<p>
-  management works!
-</p>
+<div class="management-container">
+  <div class="card-container">
+    <mat-card>
+      <mat-card-header class="form-container">
+        <mat-form-field>
+          <input [(ngModel)]="officeName" matInput placeholder="Office Name">
+        </mat-form-field>
+        <span>
+          <button mat-raised-button (click)="createOffice()"> Add </button>
+        </span>
+      </mat-card-header>
+      <mat-card-content>
+        <h3 matLine> Offices </h3>
+        <mat-action-list>
+          <button mat-list-item *ngFor="let office of offices" (click)="setPantries(office)"> {{office.name}} </button>
+        </mat-action-list>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div *ngIf="selectedOffice" class="card-container">
+    <mat-card>
+      <mat-card-header class="form-container">
+        <mat-form-field>
+          <input [(ngModel)]="pantryName" matInput placeholder="Pantry Name">
+        </mat-form-field>
+        <span>
+          <button mat-raised-button (click)="addPantry()"> Add </button>
+        </span>
+      </mat-card-header>
+      <mat-card-content>
+        <h3 matLine> Pantries  - {{ selectedOffice.name }} </h3>
+        <mat-list>
+          <mat-list-item *ngFor="let pantry of pantries"> {{pantry.name}} </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
