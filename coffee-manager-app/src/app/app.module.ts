@@ -13,6 +13,7 @@ import {
   MatGridListModule,
   MatFormFieldModule,
   MatInputModule,
+  MatSelectModule,
 } from '@angular/material';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -49,6 +50,7 @@ import { FormsModule } from '@angular/forms';
     MatGridListModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSelectModule,
     FormsModule
   ],
   providers: [],

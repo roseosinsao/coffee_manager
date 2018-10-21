@@ -2,10 +2,18 @@
   margin: 25px;
 }
 
+.order-details-container mat-form-field {
+  display: flex;
+  flex-direction: column;
+}
+
 .card-container {
-  margin: 10px;
-  width: 200px;
+  margin: 25px;
   display: inline-flex;
+}
+
+.card-container mat-card {
+  min-width: 200px;
 }
 
 .card-title {
