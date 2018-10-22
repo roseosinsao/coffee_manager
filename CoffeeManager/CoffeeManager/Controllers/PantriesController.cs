@@ -14,10 +14,10 @@
     [ApiController]
     public class PantriesController : ControllerBase
     {
-        private readonly coffeemanagersqldbContext _context;
+        private readonly CoffeeManagerDBContext _context;
         private readonly StockService stockRepository;
 
-        public PantriesController(coffeemanagersqldbContext context)
+        public PantriesController(CoffeeManagerDBContext context)
         {
             _context = context;
             this.stockRepository = new StockService(_context);

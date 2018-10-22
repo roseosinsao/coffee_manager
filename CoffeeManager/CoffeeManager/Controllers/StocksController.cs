@@ -13,9 +13,9 @@
     [ApiController]
     public class StocksController : ControllerBase
     {
-        private readonly coffeemanagersqldbContext _context;
+        private readonly CoffeeManagerDBContext _context;
 
-        public StocksController(coffeemanagersqldbContext context)
+        public StocksController(CoffeeManagerDBContext context)
         {
             _context = context;
         }

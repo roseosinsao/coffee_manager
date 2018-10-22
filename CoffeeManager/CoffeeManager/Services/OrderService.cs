@@ -6,9 +6,9 @@
 
     public class OrderService : IOrderService
     {
-        private readonly coffeemanagersqldbContext _context;
+        private readonly CoffeeManagerDBContext _context;
 
-        public OrderService(coffeemanagersqldbContext context)
+        public OrderService(CoffeeManagerDBContext context)
         {
             _context = context;
         }

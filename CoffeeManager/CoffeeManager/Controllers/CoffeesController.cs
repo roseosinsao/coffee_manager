@@ -9,9 +9,9 @@
     [ApiController]
     public class CoffeesController : ControllerBase
     {
-        private readonly coffeemanagersqldbContext _context;
+        private readonly CoffeeManagerDBContext _context;
 
-        public CoffeesController(coffeemanagersqldbContext context)
+        public CoffeesController(CoffeeManagerDBContext context)
         {
             _context = context;
         }

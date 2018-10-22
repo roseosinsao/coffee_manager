@@ -20,14 +20,11 @@
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var connection = @"Data Source=AGAPHETOS-WIN10\SQLEXPRESS;Initial Catalog=coffeemanagersqldb;Integrated Security=True";
-
-            // services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddMvc().AddJsonOptions(options => {
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
-            services.AddEntityFrameworkSqlServer().AddDbContext<coffeemanagersqldbContext>(options => 
-                options.UseSqlServer(connection)
+            services.AddEntityFrameworkSqlServer().AddDbContext<CoffeeManagerDBContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
             );
             //services.Configure<IStockService>(Configuration);
             services.AddTransient<IStockService, StockService>();

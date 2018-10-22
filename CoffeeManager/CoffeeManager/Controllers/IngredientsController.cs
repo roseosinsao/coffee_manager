@@ -8,9 +8,9 @@
     [ApiController]
     public class IngredientsController : ControllerBase
     {
-        private readonly coffeemanagersqldbContext _context;
+        private readonly CoffeeManagerDBContext _context;
 
-        public IngredientsController(coffeemanagersqldbContext context)
+        public IngredientsController(CoffeeManagerDBContext context)
         {
             _context = context;
         }

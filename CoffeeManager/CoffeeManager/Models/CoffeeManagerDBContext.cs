@@ -2,13 +2,13 @@
 {
     using Microsoft.EntityFrameworkCore;
 
-    public partial class coffeemanagersqldbContext : DbContext
+    public partial class CoffeeManagerDBContext : DbContext
     {
-        public coffeemanagersqldbContext()
+        public CoffeeManagerDBContext()
         {
         }
 
-        public coffeemanagersqldbContext(DbContextOptions<coffeemanagersqldbContext> options)
+        public CoffeeManagerDBContext(DbContextOptions<CoffeeManagerDBContext> options)
             : base(options)
         {
         }
@@ -20,15 +20,6 @@
         public virtual DbSet<Orders> Orders { get; set; }
         public virtual DbSet<Pantry> Pantry { get; set; }
         public virtual DbSet<Stock> Stock { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Data Source=AGAPHETOS-WIN10\\SQLEXPRESS;Initial Catalog=coffeemanagersqldb;Integrated Security=True");
-            }
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

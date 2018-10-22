@@ -14,11 +14,11 @@
     [ApiController]
     public class OrdersController : ControllerBase
     {
-        private readonly coffeemanagersqldbContext _context;
+        private readonly CoffeeManagerDBContext _context;
         private readonly IStockService stockService;
         private readonly IOrderService orderService;
 
-        public OrdersController(coffeemanagersqldbContext context, IStockService stockService, IOrderService orderService)
+        public OrdersController(CoffeeManagerDBContext context, IStockService stockService, IOrderService orderService)
         {
             _context = context;
             this.stockService = stockService;

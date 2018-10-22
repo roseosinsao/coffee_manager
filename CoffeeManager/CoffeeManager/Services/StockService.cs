@@ -6,9 +6,9 @@
 
     public class StockService : IStockService
     {
-        private readonly coffeemanagersqldbContext _context;
+        private readonly CoffeeManagerDBContext _context;
 
-        public StockService(coffeemanagersqldbContext context)
+        public StockService(CoffeeManagerDBContext context)
         {
             _context = context;
         }

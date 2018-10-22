@@ -13,9 +13,9 @@
     [ApiController]
     public class OfficesController : ControllerBase
     {
-        private readonly coffeemanagersqldbContext _context;
+        private readonly CoffeeManagerDBContext _context;
 
-        public OfficesController(coffeemanagersqldbContext context)
+        public OfficesController(CoffeeManagerDBContext context)
         {
             _context = context;
         }
