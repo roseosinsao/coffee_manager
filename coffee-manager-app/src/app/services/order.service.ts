@@ -4,33 +4,32 @@ import { Observable } from 'rxjs';
 import { Order } from '../models/order.model';
 import { Guid } from 'guid-typescript';
 import { OrderPieChartModel } from '../models/order-chart.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrderService {
-  private ordersURL = 'http://localhost:5000/api/orders';
-
   constructor(private http: HttpClient) { }
 
   orderCoffee(coffee: Order): Observable<Order> {
-    return this.http.post<Order>(this.ordersURL, coffee);
+    return this.http.post<Order>(`${environment.apiUrl}orders`, coffee);
   }
 
   getAllOrders(): Observable<Array<Order>> {
-    return this.http.get<Array<Order>>(this.ordersURL);
+    return this.http.get<Array<Order>>(`${environment.apiUrl}orders`);
   }
 
   getOrdersPerPantry(pantryId: Guid): Observable<Array<Order>> {
     if (pantryId) {
-      return this.http.get<Array<Order>>(`${this.ordersURL}/pantry/${pantryId}`);
+      return this.http.get<Array<Order>>(`${environment.apiUrl}orders/pantry/${pantryId}`);
     }
-    return this.http.get<Array<Order>>(this.ordersURL);
+    return this.http.get<Array<Order>>(`${environment.apiUrl}orders`);
   }
 
   getPieChart(pantryId: Guid): Observable<Array<OrderPieChartModel>> {
     if (pantryId) {
-      return this.http.get<Array<OrderPieChartModel>>(`${this.ordersURL}/chart/${pantryId}`);
+      return this.http.get<Array<OrderPieChartModel>>(`${environment.apiUrl}orders/chart/${pantryId}`);
     }
   }
 }

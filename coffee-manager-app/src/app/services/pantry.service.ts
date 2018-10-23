@@ -4,23 +4,22 @@ import { Observable } from 'rxjs';
 import { Coffee } from '../models/coffee.model';
 import { Pantry } from '../models/pantry.model';
 import { Guid } from 'guid-typescript';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PantryService {
-  private pantriesURL = 'http://localhost:5000/api/pantries';
-
   constructor(private http: HttpClient) { }
 
   getPantries(officeId: Guid): Observable<Array<Pantry>> {
     if (officeId) {
-      return this.http.get<Array<Pantry>>(`${this.pantriesURL}/office/${officeId}`);
+      return this.http.get<Array<Pantry>>(`${environment.apiUrl}pantries/office/${officeId}`);
     }
-    return this.http.get<Array<Pantry>>(this.pantriesURL);
+    return this.http.get<Array<Pantry>>(`${environment.apiUrl}pantries`);
   }
 
   addPantry(model: Pantry): Observable<Pantry> {
-    return this.http.post<Pantry>(this.pantriesURL, model);
+    return this.http.post<Pantry>(`${environment.apiUrl}pantries`, model);
   }
 }
